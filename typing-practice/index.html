@@ -1,0 +1,90 @@
+<html>
+
+<head>
+  <title>typing practice</title>
+</head>
+
+<body>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: Ubuntu Mono;
+      font-style: normal;
+      font-weight: 400;
+      src: url(/assets/d637b6aefe0dba7b.woff2) format("woff2");
+      unicode-range: u+0370-03ff
+    }
+    @font-face {
+    font-display: swap;
+    font-family: Ubuntu Mono;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/assets/a0b6cc167366e4d0.woff2) format("woff2");
+    unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+2000-206f,u+2074,u+20ac,u+2122,u+2212,u+2215,u+2423,u+2e31
+}
+
+    .char {
+      font-family: "Ubuntu Mono", monospace;
+    }
+
+    .wrong {
+      color: red;
+    }
+
+    .correct {
+      color: green;
+    }
+  </style>
+  <script>
+    const str = 'hello, world';
+    const main = document.createElement('div')
+    document.body.appendChild(main)
+    main.classList.add('main')
+    const keys = 'abcdefghijklmnopqrstuvwxyz,.?! ';
+    let idx = -1;
+    const handleKeyDown = function (e) {
+      const key = e.key;
+      if (key === 'Backspace') {
+        handleBackspace();
+        return;
+      }
+      if (keys.indexOf(key) < 0) {
+        return;
+      }
+      idx += 1;
+      const ch = str[idx];
+      const chEl = main.childNodes[idx];
+      if (ch === e.key) {
+        chEl.classList.add('correct')
+      } else {
+        chEl.innerText = e.key;
+        chEl.classList.add('wrong');
+      }
+    }
+
+    const handleBackspace = function () {
+      console.log(idx)
+      const ch = str[idx];
+      const chEl = main.childNodes[idx];
+      chEl.classList.remove('correct')
+      chEl.classList.remove('wrong');
+      chEl.innerText = ch;
+      idx -= 1;
+    }
+
+    const handleChar = function (ch) {
+      const chEl = document.createElement('span')
+      main.appendChild(chEl);
+      chEl.classList.add('char')
+      chEl.innerText = ch;
+    }
+
+    for (const ch of str) {
+      handleChar(ch);
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<html>
+
+<head>
+  <title>typing practice</title>
+</head>
+
+<body>
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: Ubuntu Mono;
+      font-style: normal;
+      font-weight: 400;
+      src: url(/assets/d637b6aefe0dba7b.woff2) format("woff2");
+      unicode-range: u+0370-03ff
+    }
+
+    @font-face {
+      font-display: swap;
+      font-family: Ubuntu Mono;
+      font-style: normal;
+      font-weight: 400;
+      src: url(/assets/a0b6cc167366e4d0.woff2) format("woff2");
+      unicode-range: u+00??, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc, u+2000-206f, u+2074, u+20ac, u+2122, u+2212, u+2215, u+2423, u+2e31
+    }
+
+    .char {
+      font-family: "Ubuntu Mono", monospace;
+    }
+
+    .wrong {
+      color: red;
+    }
+
+    .correct {
+      color: green;
+    }
+  </style>
+  <script>
+    const str = 'hello, world means 你好，世界'
+    let isComposing = false;
+    const main = document.createElement('div')
+    document.body.appendChild(main)
+    const input = document.createElement('input')
+    document.body.appendChild(input);
+    input.style.opacity = 0;
+    const handleChar = function (ch) {
+      if (ch === ' ') {
+        ch = '\u2423'
+      }
+      const chEl = document.createElement('span')
+      main.appendChild(chEl)
+      chEl.classList.add('char')
+      chEl.innerText = ch;
+    }
+    let idx = -1;
+    const handleCharInput = function (ch) {
+      if (ch === ' ') {
+        ch = '\u2423'
+      }
+      idx += 1;
+      const chEl = main.childNodes[idx]
+      if (ch === chEl.innerText) {
+        chEl.classList.add('correct')
+      } else {
+        chEl.innerText = ch;
+        chEl.classList.add('wrong')
+      }
+    }
+    const handleCharDelete = function () {
+      let ch = str[idx];
+      if (ch === ' ') {
+        ch = '\u2423'
+      }
+      const chEl = main.childNodes[idx]
+      chEl.classList.remove('correct', 'wrong')
+      if (chEl.innerText !== ch) {
+        chEl.innerText = ch;
+      }
+      idx -= 1;
+    }
+    const handleInput = function (event) {
+      if (isComposing) { return }
+      const ch = input.value;
+      handleCharInput(ch)
+      input.value = '';
+    }
+    const handleKeyDown = function (event) {
+      if (event.key === 'Backspace') {
+        handleCharDelete()
+      }
+    }
+
+    input.addEventListener('compositionstart', function () {
+      isComposing = true;
+    })
+    input.addEventListener('compositionend', function (event) {
+      const data = event.data;
+      for (const ch of data) {
+        handleCharInput(ch)
+      }
+      input.value = '';
+      isComposing = false;
+    })
+    input.addEventListener('input', handleInput);
+    input.addEventListener('keydown', handleKeyDown);
+
+    for (const ch of str) {
+      handleChar(ch);
+    }
+
+    document.addEventListener('click', function () {
+      input.focus();
+    })
+  </script>
+</body>
+
+</html>
